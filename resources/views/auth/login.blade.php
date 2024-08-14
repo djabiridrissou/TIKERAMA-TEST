@@ -71,7 +71,7 @@
                 </form>
                 <div class="flex items-center justify-center mt-4 text-xs">
                     <span>Vous n'avez pas de compte ?</span>
-                    <a href="{{ route('register') }}" class="text-blue-600 ml-1 cursor-pointer">Créez un compte</a>
+                    <a href="{{ route('inscription') }}" class="text-blue-600 ml-1 cursor-pointer">Demandez un accès</a>
                 </div>
             </div>
         </div>

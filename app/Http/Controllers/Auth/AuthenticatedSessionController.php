@@ -32,13 +32,21 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            $user = Auth::user();
+
+            // rediriger en fonction du rôle
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'client') {
+                return redirect()->route('client.dashboard');
+            } else {
+                return redirect()->route('vendeur.dashboard');
+            }
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
-
     }
 
     /**
