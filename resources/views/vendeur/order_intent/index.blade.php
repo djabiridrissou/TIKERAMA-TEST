@@ -36,7 +36,7 @@
                         <td class="border px-4 py-2">{{ $order->created_at }}</td>
                         @if(Auth::user()->role == 'admin')
                         <td class="border px-4 ml-2 py-2 text-left">
-                                @if($order->statut == 'n attente de validation')
+                                @if($order->statut == 'En attente de validation')
                                 <a href="{{ route('accept', $order->order_intent_id) }}" class="text-white hover:text-blue-300" title="Modifier">
                                     <span class="text-white hover:text-blue-300 bg-blue-500 px-2 py-1 rounded">Valider</span>
                                 </a>

@@ -66,6 +66,7 @@ class OrderIntentController extends Controller
         $orderIntent->expiration_date = date('Y-m-d', strtotime('+1 week'));
         $orderIntent->statut = 'En attente de validation';
         $orderIntent->quantity = $data['quantity'];
+        $orderIntent->total_price = $data['total_price'];
 
         $ticketType->ticket_type_quantity = $ticketType->ticket_type_quantity - $data['quantity'];
         $ticketType->save();
