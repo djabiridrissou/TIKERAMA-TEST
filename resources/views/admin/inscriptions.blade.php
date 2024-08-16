@@ -43,6 +43,21 @@
         </table>
     </div>
 
+    <!-- <div x-data="{ open: @json(session('status') ? true : false) }" x-show="open" @click.away="open = false" class="fixed inset-0 flex items-center justify-center z-50">
+                <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <h5 class="text-lg font-bold">Confirmation</h5>
+                        <button @click="open = false" class="text-gray-500 hover:text-gray-700">&times;</button>
+                    </div>
+                    <div class="py-4">
+                        Les informations ont été envoyées à l'utilisateur sur son mail renseigné.
+                    </div>
+                    <div class="flex justify-end">
+                        <button @click="open = false" class="bg-blue-500 text-white py-2 px-4 rounded">Fermer</button>
+                    </div>
+                </div>
+            </div> -->
+
     <div class="mt-4">
         {{ $inscriptions->links() }}
     </div>

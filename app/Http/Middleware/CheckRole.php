@@ -16,16 +16,16 @@ class CheckRole
      * @param  string  $role
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $role)
+
+
+    public function handle($request, Closure $next, ...$roles)
     {
-        if (Auth::check() && Auth::user()->role === $role) {
+        $user = Auth::user();
+
+        if ($user && in_array($user->role, $roles)) {
             return $next($request);
         }
 
-        if (!Auth::check() || Auth::user()->role !== $role) {
-            abort(403, 'Access denied');
-        }
-
-        return redirect('/login');
+        return redirect('/login')->with('error', 'Vous n\'avez pas les droits d\'accès à cette page.');
     }
 }

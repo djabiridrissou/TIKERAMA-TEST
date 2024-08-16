@@ -24,8 +24,7 @@ class TicketType extends Model
     ];
 
     // Relation avec le modèle Event
-    public function event()
-    {
+    public function event() {
         return $this->belongsTo(Event::class, 'ticket_type_event_id', 'event_id');
     }
 

@@ -13,7 +13,7 @@ class Event extends Model
 
     protected $primaryKey = 'event_id';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'event_category',
@@ -24,6 +24,8 @@ class Event extends Model
         'event_city',
         'event_address',
         'event_status',
-        'event_created_on'
+        'event_created_on',
     ];
+
+    
 }

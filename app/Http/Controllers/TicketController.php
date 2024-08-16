@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
    // Liste tous les tickets
    public function index()
    {
-       $tickets = Ticket::all();
-       return view('tickets.index', compact('tickets'));
+        $user = Auth::user();
+        $tickets = Ticket::where('ticket_email', $user->email)->get();
+        return view('vendeur.tickets.index', compact('tickets'));
    }
 
    // Affiche un ticket spécifique

@@ -21,7 +21,7 @@ class UserInscriptionController extends Controller
             $inscriptions = UserInscription::paginate(1);
             
             // Retourner la vue avec les inscriptions
-            return view('dashboards.admin', ['inscriptions' => $inscriptions]);
+            return view('admin.inscriptions', ['inscriptions' => $inscriptions]);
         } catch (\Exception $e) {
             // Gestion des erreurs
             Log::error('Error fetching inscriptions: ' . $e->getMessage());

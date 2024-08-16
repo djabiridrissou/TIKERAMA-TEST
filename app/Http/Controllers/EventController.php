@@ -3,73 +3,84 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Event;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
     // lister events
     public function index()
     {
-        $events = Event::all();
-        return view('events.index', compact('events'));
+        $user = Auth::user();
+
+        if ($user->role === 'admin' || $user->role === 'vendeur') {
+            $events = Event::all();
+            return view('admin.events.index', compact('events'));
+        }
+
+        return redirect()->route('login')->with('error', 'Vous n\'avez pas les droits d\'accès à cette page.');
     }
 
     // afficher un event
-    public function show($id)
+    /* public function show($id)
     {
         $event = Event::findOrFail($id);
         return view('events.show', compact('event'));
-    }
+    } */
 
-    // afficher formulaire d'un event
-    public function create()
-    {
-        return view('events.create');
-    }
 
-    // enregister event
     public function store(Request $request)
     {
-        $request->validate([
-            'event_category' => 'required|in:Autre,Concert-Spectacle,Diner Gala,Festival,Formation',
-            'event_title' => 'required|string|max:30',
-            'event_description' => 'required|string',
-            'event_date' => 'required|date',
-            'event_image' => 'nullable|string|max:200',
-            'event_city' => 'required|string|max:100',
-            'event_address' => 'required|string|max:200',
-            'event_status' => 'required|in:upcoming,completed,cancelled',
-        ]);
+        try {
+            $data = $request->all();
+            if ($request->hasFile('event_image')) {
+                $imagePath = $request->file('event_image')->store('event_images', 'public');
+                $data['event_image'] = $imagePath;
+            } else {
+                $data['event_image'] = 'default-image.png';
+            }
+            Event::create($data);
+            return redirect()->route('events.index')->with('event_created', 'Événement créé avec succès !');
+        } catch (\Exception $e) {
+            Log::error('Error creating event: ' . $e->getMessage());
+            return redirect()->route('events.index')->with('error', 'Une erreur est survenue lors de la création de l\'événement.');
+        }
+    }
+    
 
-        Event::create($request->all());
-
-        return redirect()->route('events.index')->with('success', 'Événement créé avec succès.');
+    public function create(Request $request)
+    {
+        return view('admin.events.create');
     }
 
     // edition
     public function edit($id)
     {
         $event = Event::findOrFail($id);
-        return view('events.edit', compact('event'));
+        return view('admin.events.edit', compact('event'));
     }
 
-    // Met à jour un événement existant
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'event_category' => 'required|in:Autre,Concert-Spectacle,Diner Gala,Festival,Formation',
-            'event_title' => 'required|string|max:30',
-            'event_description' => 'required|string',
-            'event_date' => 'required|date',
-            'event_image' => 'nullable|string|max:200',
-            'event_city' => 'required|string|max:100',
-            'event_address' => 'required|string|max:200',
-            'event_status' => 'required|in:upcoming,completed,cancelled',
-        ]);
-
-        $event = Event::findOrFail($id);
-        $event->update($request->all());
-
-        return redirect()->route('events.index')->with('success', 'Événement mis à jour avec succès.');
+        try {
+            $event = Event::findOrFail($id);
+            $data = $request->all();
+    
+            if ($request->hasFile('event_image')) {
+                if ($event->event_image) {
+                    Storage::delete('public/' . $event->event_image);
+                }
+                $imagePath = $request->file('event_image')->store('event_images', 'public');
+                $data['event_image'] = $imagePath;
+            }
+            
+            $event->update($data);
+            return redirect()->route('events.index')->with('success', 'Événement mis à jour avec succès !');
+        } catch (\Exception $e) {
+            Log::error('Error updating event: ' . $e->getMessage());
+            return redirect()->route('events.index')->with('error', 'Une erreur est survenue lors de la mise à jour de l\'événement.');
+        }
     }
 
     // Supprime un événement
@@ -78,6 +89,6 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
         $event->delete();
 
-        return redirect()->route('events.index')->with('success', 'Événement supprimé avec succès.');
+        return redirect()->route('admin.events.index')->with('destroy_success', 'Événement supprimé avec succès.');
     }
 }

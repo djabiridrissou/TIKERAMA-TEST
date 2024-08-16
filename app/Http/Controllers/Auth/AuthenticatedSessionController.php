@@ -37,10 +37,10 @@ class AuthenticatedSessionController extends Controller
             // rediriger en fonction du rôle
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
-            } elseif ($user->role === 'client') {
-                return redirect()->route('client.dashboard');
-            } else {
-                return redirect()->route('vendeur.dashboard');
+            }
+            
+            if ($user->role === 'vendeur') {
+                return redirect()->route('events.index');
             }
         }
 

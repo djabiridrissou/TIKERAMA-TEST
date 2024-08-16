@@ -56,7 +56,7 @@
             <div class="bg-slate-100 w-full p-6 rounded-lg shadow-md">
                 <p class="border-b-2 border-black text-center text-lg font-semibold mb-4">Tikerama</p>
                 <span class="text-xs text-gray-600">Connectez-vous pour accéder aux fonctionnalités</span>
-                <form method="POST" action="{{ route('login') }}" class="mt-4 flex flex-col space-y-4">
+                <form method="POST" action="{{ route('connexion') }}" class="mt-4 flex flex-col space-y-4">
                     @csrf
                     <div class="input-container">
                         <input type="email" name="email" id="email" placeholder="Entrez votre mail" class="w-full">
