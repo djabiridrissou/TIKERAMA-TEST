@@ -19,5 +19,11 @@ class OrderIntent extends Model
         'user_email',
         'user_phone',
         'expiration_date',
+        'statut',
+        'quantity'
     ];
+
+    public function typeTicket() {
+        return $this->belongsTo(TicketType::class, 'order_intent_type');
+    }
 }
